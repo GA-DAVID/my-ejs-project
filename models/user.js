@@ -2,7 +2,7 @@ const mongoose = require('mongoose'); //---🦦
 
 
 
-//Let's build the Schema Blueprint for an individual User
+//Let's build the 📜Schema Blueprint for an individual User
 const userSchema = mongoose.Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },

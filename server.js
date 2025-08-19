@@ -32,10 +32,10 @@ myApp.get("/", handleHomeRoute);
 
 
 
-//---- user routes -----
+//---- 👤users routes -----
 myApp.use('/users', usersRouter); //if the url starts with /users, funnel requests to usersRouter.js 
 
-//--- stories routes ----
+//--- 📖stories routes ----
 // myApp.use('/stories', /*storiesRouter() goes here */);
 
 
@@ -45,7 +45,7 @@ myApp.use('/users', usersRouter); //if the url starts with /users, funnel reques
 //---- 🦦 Let mongoose coordinate turning on the express server and connecting to MongoDB
 const mongooseStartServer = async () => {
     try {
-        //---okay mongoose, make the connection to MongoDBAtlas☁️🥭
+        //---okay mongoose, make the connection to MongoDBAtlas  🦦📡-->☁️🥭
         await mongoose.connect(DATABASE_URL);
         //---if successful in connecting to db, open server connection...
         myApp.listen(PORT, () => {
@@ -60,9 +60,6 @@ const mongooseStartServer = async () => {
 mongooseStartServer(); //---call the function to connect to database and start server 🏁
 
 
-// myApp.listen(PORT, () => {
-//     console.log(`Server is listening on port ${PORT} 🎧`);
-// })
 
 
 
