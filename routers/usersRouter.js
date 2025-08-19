@@ -25,7 +25,24 @@ usersRouter.get("/", (req, res) => {
 usersRouter.get("/:id", (req, res) => {
     //gets a user by id from the database and returns it to the client
     //in the url it would look like this: localhost:8080/users/77eu8-95e7y
-    console.log("reached the 'users/:id' GET route");
+    console.log("---reached the 'users/:id' GET route");
+    const userId = req.params.id; //---grab the id from the url address
+
+    console.log(userId); //---let's see what id we are going to query for...
+
+
+
+    //---create async function for fetching all users in the users collection in mongodb atlas
+    const getUserById = async () => {
+        const filter = { _id: userId}
+        const user = await User.findOne(filter); //---- wait for the fetch of a single user that we query by it's _id property
+        console.log("user found:", user); //--- log the user that we found
+        res.status(200).json(user); //---then send it back to client....
+    }
+
+
+    getUserById();
+
 
 });
 

@@ -14,5 +14,6 @@ const userSchema = mongoose.Schema({
 //---now we pass the bluprint to mongoose to create a User model. 🏗️
 const User = mongoose.model("User", userSchema, "users"); 
 
+//Think of the User model as a station where you would create, read, update, and delete user-related documents.
 
 module.exports = {User};
