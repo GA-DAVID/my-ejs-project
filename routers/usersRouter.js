@@ -1,5 +1,6 @@
 const express = require('express');// import express
 const { User } = require('../models/user');
+const { default: mongoose } = require('mongoose');
 const usersRouter = express.Router(); // create a new router instance
 
 
@@ -78,9 +79,145 @@ usersRouter.post("/", (req, res) => {
     createUser()
 
 
+});//-----End of POST new user
+
+
+
+
+
+
+//-------- UPDATE existing user by :id
+usersRouter.patch("/:id",  async (req, res) => {
+  
+
+    console.log("🔥request param id: ", req.params.id);
+    console.log("🔥request body: ",req.body);
+
+    try {
+        const {id} = req.params; //---this takes the property with that name and makes it into a variable like --> const id = req.params.id
+        if(!mongoose.isValidObjectId(id)) {
+            return res.status(400).json({ error: "Invalid user ID" });
+        }
+
+
+        //1.) Whitelist
+        const allowedUpdates = ["firstName", "lastName", "password"];
+        const updates = Object.fromEntries(
+            Object.entries(req.body).filter(
+                ([objKey, objValue]) => allowedUpdates.includes(objKey) && objValue !== undefined
+            )
+        );
+
+
+        if( Object.keys(updates).length === 0) {
+            return res.status(400).json({ error: "No valid fields to update" });
+        }
+
+
+        // 2.) Atomic Updates
+        const updatedUser = await User.findByIdAndUpdate(id, { $set: updates}, { new: true, runValidators: true, context: "query" }  );
+
+
+        if(!updatedUser) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+
+        return res.status(200).json({ successMsg: "✅ User updated successfully!", user: updatedUser });
+
+    } catch (error) {
+        console.error("PATCH /users/:id error: ", error);
+        return res.status(500).json({ error: "Internal server error, something went wrong on our end." });
+        
+    }
+
 });
 
 
 
 
+
+
+
+// const myDog = {
+//     name: "Rex",
+//     breed: "German Shepherd",
+//     age: 5,
+//     "favorite Toy": "red ball" 
+// };
+
+// console.log(myDog["favorite Toy"]);
+
+
+
+
+
 module.exports = usersRouter; // export the usersRouter instance
+
+
+
+
+
+
+
+
+
+
+//--------❌ OLD UPDATE existing user by :id
+// usersRouter.patch("/:id", (req, res) => {
+//     //--fetch the user by id
+//     //--then we form a new updatedUser object by combining the user we fetched + the properties in the req.body
+//     console.log("🔥request param id: ", req.params.id);
+//     console.log("🔥request body: ",req.body);
+
+//     //---Array of valid properties that can be updated
+//     const updatedableProperties = ["firstName", "lastName", "password"];
+
+//     const updateObject = {};
+
+//     const validityCheck = () => {
+//         //loop through the array and check if the property exits in the req.body
+//         //if so, we can safely add it to the updateObject
+//         updatedableProperties.forEach(prop => { 
+//             console.log("prop:", prop);
+//             console.log("req.body[prop]:", req.body[prop]);
+
+//             if(req.body[prop]) {
+//                 updateObject[prop] = req.body[prop];
+//             }
+//             else {
+//                 console.log("Property not found: ", prop);
+//             }
+//         });
+
+//     };
+
+//     validityCheck();
+
+//     console.log("updateObject:", updateObject);
+
+//     //---capture the data above in variables
+//     const userId = req.params.id;
+
+
+//     const updateUserById = async () => {
+//         const currentUser = await User.findOne({_id: userId}); //find the current user in mongoDB
+//         console.log("currentUser:", currentUser);
+
+//         // const updatedUser = { ...currentUser._doc, ...updateObject};//----
+//         const updatedUser2 = Object.assign({}, currentUser._doc, updateObject);
+//         // console.log("updatedUser:", updatedUser);
+//         console.log("updatedUser2:", updatedUser2);
+
+//         //----last step, write the updated user to the database
+//         const updateConfirmMsg = await User.updateOne({_id: userId}, updatedUser2);
+
+//         console.log("User updated successfully", updateConfirmMsg);
+
+//         res.status(200).json({ successMsg: "✅ User updated successfully!", updateConfirmMsg })
+//     };
+
+
+//     updateUserById();
+
+// });
