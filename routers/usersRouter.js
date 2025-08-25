@@ -13,6 +13,8 @@ usersRouter.get("/", (req, res) => {
     const getAllUsers = async () => {
         const allUsers = await User.find(); //-- wait for the fetch of all users...
         res.status(200).json(allUsers); //---then send it back to client....
+
+        res.status(200).render("users", { users: allUsers });
     }
 
 
@@ -36,8 +38,10 @@ usersRouter.get("/:id", (req, res) => {
     //---create async function for fetching all users in the users collection in mongodb atlas
     const getUserById = async () => {
         const filter = { _id: userId}
-        const user = await User.findOne(filter); //---- wait for the fetch of a single user that we query by it's _id property
+        const user = await User.findOne(filter).populate('stories'); //---- wait for the fetch of a single user that we query by it's _id property and also fetch the user's stories in the stories array[] before sending back to client using .populate('stories').
         console.log("user found:", user); //--- log the user that we found
+
+
         res.status(200).json(user); //---then send it back to client....
     }
 

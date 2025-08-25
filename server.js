@@ -6,6 +6,7 @@ const mongoose = require('mongoose'); //---🦦
 
 //----import routers here ----
 const usersRouter = require('./routers/usersRouter');
+const storiesRouter = require('./routers/storiesRouter');
 
 
 
@@ -36,7 +37,7 @@ myApp.get("/", handleHomeRoute);
 myApp.use('/users', usersRouter); //if the url starts with /users, funnel requests to usersRouter.js 
 
 //--- 📖stories routes ----
-// myApp.use('/stories', /*storiesRouter() goes here */);
+myApp.use('/stories', storiesRouter);
 
 
 

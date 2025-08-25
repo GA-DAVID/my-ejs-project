@@ -8,6 +8,7 @@ const userSchema = mongoose.Schema({
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, minlength: 6 },
+    stories: [{ type: mongoose.Schema.Types.ObjectId, ref: "Story"}]
 })
 
 
