@@ -17,8 +17,10 @@ const DATABASE_URL = process.env.DATABASE_URL; //import the dabase url
 //-----create our express app 🪺
 const myApp = express();
 
+//------------------------------------------------------
+//----- 🛠️ 🥅 MIDDLEWARES -----------------------------
+//------------------------------------------------------
 
-// ------ 🪈🪈🥅 MIDDLEWARES -----
 myApp.use(express.json()); //---- parse any incoming request that has a body of data attached to it. 
 
 
@@ -28,7 +30,11 @@ const handleHomeRoute = (req, res) => {
     res.send("Welcome to the Home Page!");
 }
 
-//----- 🛣️ ROUTES -----
+//------------------------------------------------------
+//----- 🛣️ ROUTES --------------------------------------
+//------------------------------------------------------
+
+//---- 🏠 home route ---
 myApp.get("/", handleHomeRoute);
 
 
